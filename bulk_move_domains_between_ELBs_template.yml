@@ -1,0 +1,16 @@
+- name: Move Domain/s between Load Balancers 
+  hosts: localhost
+  tasks:
+    - name: Point Domains to Application Router
+      route53:
+        alias: True
+        alias_hosted_zone_id: "$ZONEID"
+        command: create
+        overwrite: True
+        record: "{{ item }}"
+        ttl: 300
+        type: A
+        value: "$NEWELB"
+        zone: "$ZONENAME"
+      with_items:
+        - $DOMAIN
